@@ -3,16 +3,45 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Web Layout</title>
-	<link rel="stylesheet" href="dist/css/main.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Concert+One" rel="stylesheet">
+  <link rel="stylesheet" href="dist/css/main.min.css">
 </head>
 <body>
-	<header>
-    <h1 class="logo"><strong>Face</strong> Access</h1>
-  </header>
-  <div class="camera-container">
-    <h2>LOOK AT ME</h2>
-    <div class="camera-view"></div>
-    <div class="label">Don't Blink</div>
+  <div class="bg-background"></div>
+  <div class="container">
+    <div class="col-left">
+      <header>
+        <h2 class="logo">MEDI-FOCUS</h2>
+      </header>
+      <div class="camera-container">
+        <div class="camera-view">
+          <video src=""></video>
+          <button class="btn-default">Search</button>
+          <button class="btn-secondary">Register</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-right">
+      <h2 class="primary-heading">User Details</h2>
+      <div class="user-info">
+        <figure class="profile-pic">
+          <img src="https://chrisbenson.com/images/chrisbenson_square-profile_2016_with-background.png" alt="">
+        </figure>
+
+        <div class="user-details">
+          <dl>
+            <dt>Name:</dt>
+            <dd>Chris Benson</dd>
+
+            <dt>Email:</dt>
+            <dd><a href="mailto:chris.benson@gmail.com">chris.benson@gmail.com</a></dd>
+
+            <dt>Mobile No.:</dt>
+            <dd>7387475662</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>

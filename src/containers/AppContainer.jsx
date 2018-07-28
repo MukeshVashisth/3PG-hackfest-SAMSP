@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 // import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
 import CameraView from '../components/CameraView'
-import CaptureButton from '../components/CameraButton'
+import Button from '../components/Button'
 // import { matchImage } from '../state/actions/faceDetection'
 import { uploadImageToAws } from '../lib/aws'
 
@@ -15,11 +15,13 @@ class AppContainer extends Component {
       captured: false,
       imageSrc: '',
       mobileNumber: '',
-      fullname: ''
+      fullname: '',
+      diagnosis: ''
     }
 
     this.handleCapture = this.handleCapture.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleRegister = this.handleRegister.bind(this)
     this.setRef = this.setRef.bind(this)
   }
 
@@ -34,7 +36,18 @@ class AppContainer extends Component {
       imageSrc
     })
     // this.props.matchImage()
-    uploadImageToAws({ name: this.state.fullname, mobileNumber: this.state.mobileNumber, imageSrc: this.state.imageSrc })
+    uploadImageToAws({
+      name: this.state.fullname,
+      mobileNumber: this.state.mobileNumber,
+      imageSrc: this.state.imageSrc,
+      diagnosis: this.state.diagnosis
+    })
+
+    this.props.handleSidebarStatus()
+  }
+
+  handleRegister() {
+    window.console.log('register')
   }
 
   handleChange(e) {
@@ -44,34 +57,56 @@ class AppContainer extends Component {
   render() {
     return (
       <div className='camera-container'>
-        <h2>LOOK AT ME</h2>
         <div className='camera-view'>
           <CameraView
             setRef={this.setRef}
             screenshotFormat='image/jpeg'
           />
-          <CaptureButton handleCapture={this.handleCapture}/>
-          mobile number
-          <input
-            value={this.state.mobileNumber}
-            name='mobileNumber'
-            onChange={this.handleChange}
-          />
-          name
-          <input
-            value={this.state.fullname}
-            name='fullname'
-            onChange={this.handleChange}
-          />
+          <Button handleClick={this.handleCapture} title='Search' cssClass='btn-default'/>
+
+          <div className='registration-form'>
+            <Button handleClick={this.handleRegister} cssClass='btn-secondary' title='Register'/>
+            <dl>
+              <dt>Name:</dt>
+              <dd>
+                <input
+                  type='text'
+                  value={this.state.fullname}
+                  name='fullname'
+                  onChange={this.handleChange}
+                />
+              </dd>
+
+              <dt>Mobile Number:</dt>
+              <dd>
+                <input
+                  type='text'
+                  value={this.state.mobileNumber}
+                  name='mobileNumber'
+                  onChange={this.handleChange}
+                />
+              </dd>
+
+              <dt>Diagnosis:</dt>
+              <dd>
+                <input
+                  type='text'
+                  value={this.state.diagnosis}
+                  name='diagnosis'
+                  onChange={this.handleChange}
+                />
+              </dd>
+            </dl>
+          </div>
         </div>
-        <div className='label'>Don't Blink</div>
       </div>
     )
   }
 }
 
 AppContainer.propTypes = {
-  matchImage: PropTypes.func
+  matchImage: PropTypes.func,
+  handleSidebarStatus: PropTypes.func
 }
 
 function mapStateToProps(state) {
