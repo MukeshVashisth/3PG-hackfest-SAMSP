@@ -1,0 +1,62 @@
+$primary-color: #009688;
+$secondary-color: #000;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 16px;
+  background: #eee;
+  // background: url('https://www.toptal.com/designers/subtlepatterns/patterns/funky-lines.png');
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+header {
+  width: 100%;
+  padding: 10px;
+  color: #fff;
+  display: table;
+  margin-bottom: 40px;
+  background: $primary-color;
+  box-sizing: border-box;
+  .logo {
+    float: left;
+    padding: 10px;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 4px;
+    font-weight: normal;
+    border: 2px solid #fff;
+  }
+}
+
+.camera-container {
+  width: 400px;
+  margin: 0 auto;
+  h2 {
+    padding: 24px;
+    color: #fff;
+    text-align: center;
+    background: $secondary-color;
+    small {
+      display: block;
+      font-size: 14px;
+      font-weight: normal;
+      text-transform: uppercase;
+    }
+  }
+  .label {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #888;
+  }
+  .camera-view {
+    height: 400px;
+    background: #fff;
+    border: 1px solid $secondary-color;
+  }
+}
+
