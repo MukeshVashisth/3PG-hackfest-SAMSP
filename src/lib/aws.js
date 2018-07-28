@@ -10,25 +10,25 @@ import credentials from './credentials'
 // myConfig.update({region: 'us-east-1'})
 
 AWS.config.update({
-  region: 'ap-east-1',
+  region: 'ap-northeast-1',
   credentials
 })
 
-const bucketName = 'kailashbucket'
+const bucketName = 'facerecognitionbuckethackfest3pg'
 
 export function uploadImageToAws({ imageSrc, mobileNumber, name }) {
   window.console.log('aws config' ,AWS.config)
-  const keyName = `${mobileNumber}.jpeg`
+  const keyName = `index/${mobileNumber}.jpeg`
   const buf = new Buffer(imageSrc.replace(/^data:image\/\w+;base64,/, ''),'base64')
   const objectParams = {
     Bucket: bucketName,
     Key: keyName,
     Body: buf,
     ContentEncoding: 'base64',
-    ContentType: 'image/jpeg'
-    // Metadata: {
-    //   fullname: name
-    // }
+    ContentType: 'image/jpeg',
+    Metadata: {
+      'fullname': `${name}`
+    }
   }
   window.console.log(objectParams)
   new AWS.S3({params: {Bucket: bucketName}}).putObject(objectParams, function(err, data) {
