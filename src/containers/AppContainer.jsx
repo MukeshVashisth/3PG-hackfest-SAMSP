@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import CameraView from '../components/CameraView'
 import CaptureButton from '../components/CameraButton'
 // import { matchImage } from '../state/actions/faceDetection'
-import { uploadImageToAws } from '../lib/aws'
+import { searchByImage } from '../lib/aws'
 
 class AppContainer extends Component {
   constructor(props) {
@@ -34,7 +34,8 @@ class AppContainer extends Component {
       imageSrc
     })
     // this.props.matchImage()
-    uploadImageToAws({ name: this.state.fullname, mobileNumber: this.state.mobileNumber, imageSrc: this.state.imageSrc })
+    // uploadImageToAws({ name: this.state.fullname, mobileNumber: this.state.mobileNumber, imageSrc: this.state.imageSrc })
+    searchByImage({ imageSrc: this.state.imageSrc })
   }
 
   handleChange(e) {
