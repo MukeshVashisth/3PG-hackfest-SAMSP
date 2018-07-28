@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import PropTypes from 'prop-types'
 import CameraView from '../components/CameraView'
 import CaptureButton from '../components/CameraButton'
+import { matchImage } from '../state/actions/faceDetection'
+import { uploadImageToAws } from '../lib/aws'
 
 class AppContainer extends Component {
   constructor(props) {
@@ -8,10 +13,13 @@ class AppContainer extends Component {
 
     this.state = {
       captured: false,
-      imageSrc: ''
+      imageSrc: '',
+      mobileNumber: '',
+      fullname: ''
     }
 
     this.handleCapture = this.handleCapture.bind(this)
+    this.handleChange = this.handleChange.bind(this)
     this.setRef = this.setRef.bind(this)
   }
 
@@ -21,11 +29,16 @@ class AppContainer extends Component {
 
   handleCapture() {
     const imageSrc = this.webcam.getScreenshot()
-    window.console.log(imageSrc)
     this.setState({
       captured: true,
       imageSrc
     })
+    this.props.matchImage()
+    uploadImageToAws({ name: this.state.fullname, mobileNumber: this.state.mobileNumber, imageSrc: this.state.imageSrc })
+  }
+
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   render() {
@@ -38,6 +51,18 @@ class AppContainer extends Component {
             screenshotFormat='image/jpeg'
           />
           <CaptureButton handleCapture={this.handleCapture}/>
+          mobile number
+          <input
+            value={this.state.mobileNumber}
+            name='mobileNumber'
+            onChange={this.handleChange}
+          />
+          name
+          <input
+            value={this.state.fullname}
+            name='fullname'
+            onChange={this.handleChange}
+          />
         </div>
         <div className='label'>Don't Blink</div>
       </div>
@@ -45,4 +70,20 @@ class AppContainer extends Component {
   }
 }
 
-export default AppContainer
+AppContainer.propTypes = {
+  matchImage: PropTypes.func
+}
+
+function mapStateToProps(state) {
+  return {
+    faceDetectionResponse: state.faceDetection.faceDetectionResponse
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    matchImage
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer)
