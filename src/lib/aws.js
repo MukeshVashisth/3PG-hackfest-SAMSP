@@ -8,7 +8,7 @@ AWS.config.update({
 
 const bucketName = 'facerecognitionbuckethackfest3pg'
 
-export function uploadImageToAws({ imageSrc, mobileNumber, name }) {
+export function uploadImageToAws({ imageSrc, mobileNumber, name, diagnosis }) {
   window.console.log('aws config' ,AWS.config)
   const keyName = `index/${mobileNumber}.jpeg`
   const buf = new Buffer(imageSrc.replace(/^data:image\/\w+;base64,/, ''),'base64')
@@ -19,7 +19,8 @@ export function uploadImageToAws({ imageSrc, mobileNumber, name }) {
     ContentEncoding: 'base64',
     ContentType: 'image/jpeg',
     Metadata: {
-      fullname: name
+      fullname: name,
+      diagnosis
     }
   }
   window.console.log(objectParams)
