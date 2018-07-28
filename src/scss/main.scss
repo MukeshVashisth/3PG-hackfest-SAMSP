@@ -54,9 +54,8 @@ header {
     color: #888;
   }
   .camera-view {
-    height: 400px;
+    min-height: 298px;
     background: #fff;
     border: 1px solid $secondary-color;
   }
 }
-

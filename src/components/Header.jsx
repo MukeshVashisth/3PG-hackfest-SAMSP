@@ -1,24 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
 
-const Header = props => {
+const Header = () => {
   return (
     <header>
-      <h2 className='logo'>Face ID</h2>
-      <div className='userInfo'>{`${props.user.fname} ${props.user.lname}`}</div>
+      <h1 className='logo'><strong>Face</strong> Access</h1>
     </header>
   )
 }
 
-const mapStateToProps = state => {
-  return {
-    user: state.user
-  }
-}
-
-Header.propTypes = {
-  user: PropTypes.object.isRequired
-}
-
-export default connect(mapStateToProps)(Header)
+export default Header
