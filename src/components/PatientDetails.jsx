@@ -1,33 +1,61 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 class PatientDetails extends Component {
-  // constructor(props) {
-  //   super(props)
-  //
-  //   this.state = {}
-  // }
+  constructor(props) {
+    super(props)
+
+    this.renderSelectedPatient = this.renderSelectedPatient.bind(this)
+  }
+
+  renderSelectedPatient({ selectedIndex }) {
+    let patient
+    switch (selectedIndex) {
+    case 0:
+      patient = this.props.patient_0
+      break
+    case 1:
+      patient = this.props.patient_1
+      break
+    case 2:
+      patient = this.props.patient_2
+      break
+    }
+    if (patient.result) {
+      const {
+        image,
+        result
+      } = patient
+      return (
+        <div>
+          <figure className='profile-pic'>
+            <img src={image} />
+          </figure>
+
+          <div className='user-details'>
+            <dl>
+              <dt>Name:</dt>
+              <dd>{result[0]}</dd>
+
+              <dt>Diagnosis:</dt>
+              <dd>{result[1]}</dd>
+
+              <dt>Mobile No.:</dt>
+              <dd>{result[2].split('.')[0]}</dd>
+            </dl>
+          </div>
+        </div>
+      )
+    }
+  }
 
   render() {
     return (
       <div className='col-right'>
         <h2 className='primary-heading'>User Details</h2>
         <div className='user-info'>
-          <figure className='profile-pic'>
-            <img src='https://chrisbenson.com/images/chrisbenson_square-profile_2016_with-background.png' />
-          </figure>
-
-          <div className='user-details'>
-            <dl>
-              <dt>Name:</dt>
-              <dd>Chris Benson</dd>
-
-              <dt>Diagnosis:</dt>
-              <dd>Hypertension</dd>
-
-              <dt>Mobile No.:</dt>
-              <dd>7387475662</dd>
-            </dl>
-          </div>
+          {this.props.patient_0 ? this.renderSelectedPatient({ selectedIndex: 0 }) : null}
 
           <div className='other-matches'>
             <h4>Other Matches:</h4>
@@ -43,4 +71,19 @@ class PatientDetails extends Component {
   }
 }
 
-export default PatientDetails
+PatientDetails.propTypes = {
+  patient_0: PropTypes.object.isRequired,
+  patient_1: PropTypes.object.isRequired,
+  patient_2: PropTypes.object.isRequired
+}
+
+function mapStateToProps(state) {
+  window.console.log(state)
+  return {
+    patient_0: state.faceDetection.patient_0,
+    patient_1: state.faceDetection.patient_1,
+    patient_2: state.faceDetection.patient_2
+  }
+}
+
+export default connect(mapStateToProps)(PatientDetails)
