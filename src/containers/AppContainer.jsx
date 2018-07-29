@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-// import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
 import CameraView from '../components/CameraView'
 import Button from '../components/Button'
-// import { matchImage } from '../state/actions/faceDetection'
-import { uploadImageToAws, searchByImage } from '../lib/aws'
+import { uploadImageToAws, searchByImage } from '../state/actions/faceDetection'
 
 class AppContainer extends Component {
   constructor(props) {
@@ -35,7 +34,7 @@ class AppContainer extends Component {
       captured: true,
       imageSrc
     })
-    searchByImage({ imageSrc: this.state.imageSrc })
+    this.props.searchByImage({ imageSrc })
     this.props.handleSidebarStatus()
   }
 
@@ -44,10 +43,10 @@ class AppContainer extends Component {
     this.setState({
       captured: true
     })
-    uploadImageToAws({
+    this.props.uploadImageToAws({
       name: this.state.fullname,
       mobileNumber: this.state.mobileNumber,
-      imageSrc: imageSrc,
+      imageSrc,
       diagnosis: this.state.diagnosis
     })
   }
@@ -107,7 +106,8 @@ class AppContainer extends Component {
 }
 
 AppContainer.propTypes = {
-  matchImage: PropTypes.func,
+  uploadImageToAws: PropTypes.func,
+  searchByImage: PropTypes.func,
   handleSidebarStatus: PropTypes.func
 }
 
@@ -117,10 +117,11 @@ function mapStateToProps(state) {
   }
 }
 
-// function mapDispatchToProps(dispatch) {
-//   return bindActionCreators({
-//     matchImage
-//   }, dispatch)
-// }
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    uploadImageToAws,
+    searchByImage
+  }, dispatch)
+}
 
-export default connect(mapStateToProps)(AppContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer)

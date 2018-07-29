@@ -1,1 +1,4 @@
-export const MATCH_IMAGE = 'MATCH_IMAGE'
+export const MATCH_IMAGE_1 = 'MATCH_IMAGE_1'
+export const MATCH_IMAGE_2 = 'MATCH_IMAGE_2'
+export const MATCH_IMAGE_0 = 'MATCH_IMAGE_0'
+export const UPLOAD_SUCCESSFULL = 'UPLOAD_SUCCESSFULL'

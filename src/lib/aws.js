@@ -23,7 +23,6 @@ export function uploadImageToAws({ imageSrc, mobileNumber, name, diagnosis }) {
       diagnosis
     }
   }
-  window.console.log(objectParams)
   new AWS.S3({params: {Bucket: bucketName}}).putObject(objectParams, function(err, data) {
     if (err) {
       window.console.log(err)
@@ -50,7 +49,6 @@ export function searchByImage({ imageSrc }) {
   rekognition.searchFacesByImage(params, function(err, data) {
     if (err) window.console.log(err, err.stack)
     else {
-      window.console.log(data)
       if (data.FaceMatches[0]) {
         const dynamoParams = {
           TableName: 'facerecognitionuser',
