@@ -1,3 +1,4 @@
+/* eslint-disable */
 import AWS from 'aws-sdk'
 import credentials from './credentials'
 
@@ -39,7 +40,7 @@ export function searchByImage({ imageSrc }) {
   const buf = new Buffer(imageSrc.replace(/^data:image\/\w+;base64,/, ''),'base64')
   const params = {
     CollectionId: 'facerecognitioncollection3pg',
-    FaceMatchThreshold: 95,
+    FaceMatchThreshold: 90,
     Image: {
       Bytes: buf
     },
@@ -50,19 +51,24 @@ export function searchByImage({ imageSrc }) {
     if (err) window.console.log(err, err.stack)
     else {
       window.console.log(data)
-      const dynamoParams = {
-        TableName: 'facerecognitionuser',
-        Key: {
-          RekognitionId: data.Face[0].FaceId
+      if (data.FaceMatches[0]) {
+        const dynamoParams = {
+          TableName: 'facerecognitionuser',
+          Key: {
+            'RekognitionId': data.FaceMatches[0].Face.FaceId
+          },
         }
+        window.console.log(dynamoParams, imageSrc);
+        new AWS.DynamoDB.DocumentClient().get(dynamoParams, function (err, data) {
+          if (err) {
+            window.console.log(err)
+          } else {
+            window .console.log(data)
+          }
+        })
+      } else {
+        window.console.log('No face found!!!!')
       }
-      new AWA.DynamoDB().get(dynamoParams, function (err, data) {
-        if (err) {
-          window.console.log(err)
-        } else {
-          window .console.log(data)
-        }
-      })
     }
   })
 }

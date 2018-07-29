@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Header from '../components/Header'
 import AppContainer from './AppContainer'
+import PatientDetails from '../components/PatientDetails'
 
 class App extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class App extends Component {
             <AppContainer handleSidebarStatus={this.changeSidebarStatus} />
           </div>
           <div className='col-right'>
+            <PatientDetails />
             <h2 className='primary-heading'>User Details</h2>
             <div className='user-info'>
               <figure className='profile-pic'>

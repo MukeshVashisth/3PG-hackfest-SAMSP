@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import CameraView from '../components/CameraView'
 import Button from '../components/Button'
-import PatientDetails from '../components/PatientDetails'
 // import { matchImage } from '../state/actions/faceDetection'
 import { uploadImageToAws, searchByImage } from '../lib/aws'
 
