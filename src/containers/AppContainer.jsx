@@ -52,10 +52,7 @@ class AppContainer extends Component {
     const {
       fullname,
       mobileNumber,
-      diagnosis,
-      fullnameValidate,
-      mobileNumberValidate,
-      diagnosisValidate
+      diagnosis
     } = this.state
 
     this.setState({
