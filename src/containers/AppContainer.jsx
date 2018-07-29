@@ -6,6 +6,28 @@ import CameraView from '../components/CameraView'
 import Button from '../components/Button'
 import { uploadImageToAws, searchByImage } from '../state/actions/faceDetection'
 
+class ModelWindow extends React.Component {
+  render() {
+    const { message, handleClick } = this.props
+    return (
+      <React.Fragment>
+        <div className='model-window'>
+          <div className='model-body'>
+            {message}
+          </div>
+          <button className='btn-popup' onClick={handleClick} >Okay</button>
+        </div>
+        <div className='overlay' />
+      </React.Fragment>
+    )
+  }
+}
+
+ModelWindow.propTypes = {
+  message: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired
+}
+
 class AppContainer extends Component {
   constructor(props) {
     super(props)
@@ -18,13 +40,15 @@ class AppContainer extends Component {
       diagnosis: '',
       fullnameValidate: false,
       mobileNumberValidate: false,
-      diagnosisValidate: false
+      diagnosisValidate: false,
+      isModelWindow: false
     }
 
     this.handleCapture = this.handleCapture.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleRegister = this.handleRegister.bind(this)
     this.setRef = this.setRef.bind(this)
+    this.closePopup = this.closePopup.bind(this)
   }
 
   setRef(webcam) {
@@ -52,10 +76,7 @@ class AppContainer extends Component {
     const {
       fullname,
       mobileNumber,
-      diagnosis,
-      fullnameValidate,
-      mobileNumberValidate,
-      diagnosisValidate
+      diagnosis
     } = this.state
 
     this.setState({
@@ -65,7 +86,7 @@ class AppContainer extends Component {
     })
 
     if (!fullname || !mobileNumber || !diagnosis) {
-      return window.alert('Please fill the form')
+      this.setState({ isModelWindow: true })
     } else {
       const imageSrc = this.webcam.getScreenshot()
       this.props.uploadImageToAws({
@@ -91,9 +112,16 @@ class AppContainer extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  closePopup() {
+    this.setState({
+      isModelWindow: false
+    })
+  }
+
   render() {
     return (
       <div className='camera-container'>
+        {this.state.isModelWindow && <ModelWindow handleClick={this.closePopup} message='Please fill all the form details to register an user.' />}
         <div className='camera-view'>
           <CameraView
             setRef={this.setRef}
