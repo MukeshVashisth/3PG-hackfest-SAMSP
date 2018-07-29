@@ -5,7 +5,7 @@ const defaultState = {
   uploaded: false,
   patient_1: {},
   patient_2: {},
-  patient_0: {},
+  patient_0: {}
 }
 
 const faceDetectionReducer = (state = defaultState, action) => {

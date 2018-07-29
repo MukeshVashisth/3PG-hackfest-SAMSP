@@ -15,7 +15,10 @@ class AppContainer extends Component {
       imageSrc: '',
       mobileNumber: '',
       fullname: '',
-      diagnosis: ''
+      diagnosis: '',
+      fullnameValidate: false,
+      mobileNumberValidate: false,
+      diagnosisValidate: false
     }
 
     this.handleCapture = this.handleCapture.bind(this)
@@ -39,15 +42,48 @@ class AppContainer extends Component {
   }
 
   handleRegister() {
-    const imageSrc = this.webcam.getScreenshot()
     this.setState({
       captured: true
     })
-    this.props.uploadImageToAws({
-      name: this.state.fullname,
-      mobileNumber: this.state.mobileNumber,
-      imageSrc,
-      diagnosis: this.state.diagnosis
+    this.formValidation()
+  }
+
+  formValidation() {
+    const {
+      fullname,
+      mobileNumber,
+      diagnosis,
+      fullnameValidate,
+      mobileNumberValidate,
+      diagnosisValidate
+    } = this.state
+
+    this.setState({
+      fullnameValidate: fullname == '' ? true : false,
+      mobileNumberValidate: mobileNumber == '' ? true : false,
+      diagnosisValidate: diagnosis == '' ? true : false
+    })
+
+    if (!fullname || !mobileNumber || !diagnosis) {
+      return window.alert('Please fill the form')
+    } else {
+      const imageSrc = this.webcam.getScreenshot()
+      this.props.uploadImageToAws({
+        name: this.state.fullname,
+        mobileNumber: this.state.mobileNumber,
+        imageSrc,
+        diagnosis: this.state.diagnosis
+      })
+      this.clearForm()
+    }
+  }
+
+  clearForm() {
+    this.setState({
+      imageSrc: '',
+      mobileNumber: '',
+      fullname: '',
+      diagnosis: ''
     })
   }
 
@@ -75,6 +111,7 @@ class AppContainer extends Component {
                   value={this.state.fullname}
                   name='fullname'
                   onChange={this.handleChange}
+                  className={this.state.fullnameValidate ? 'error' : ''}
                 />
               </dd>
 
@@ -85,6 +122,7 @@ class AppContainer extends Component {
                   value={this.state.mobileNumber}
                   name='mobileNumber'
                   onChange={this.handleChange}
+                  className={this.state.mobileNumberValidate ? 'error' : ''}
                 />
               </dd>
 
@@ -95,6 +133,7 @@ class AppContainer extends Component {
                   value={this.state.diagnosis}
                   name='diagnosis'
                   onChange={this.handleChange}
+                  className={this.state.diagnosisValidate ? 'error' : ''}
                 />
               </dd>
             </dl>
