@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import CameraView from '../components/CameraView'
 import Button from '../components/Button'
+import PatientDetails from '../components/PatientDetails'
 // import { matchImage } from '../state/actions/faceDetection'
-import { searchByImage } from '../lib/aws'
+import { uploadImageToAws, searchByImage } from '../lib/aws'
 
 class AppContainer extends Component {
   constructor(props) {
@@ -35,19 +36,21 @@ class AppContainer extends Component {
       captured: true,
       imageSrc
     })
-    // this.props.matchImage()
-    uploadImageToAws({
-      name: this.state.fullname,
-      mobileNumber: this.state.mobileNumber,
-      imageSrc: this.state.imageSrc,
-      diagnosis: this.state.diagnosis
-    })
-
+    searchByImage({ imageSrc: this.state.imageSrc })
     this.props.handleSidebarStatus()
   }
 
   handleRegister() {
-    window.console.log('register')
+    const imageSrc = this.webcam.getScreenshot()
+    this.setState({
+      captured: true
+    })
+    uploadImageToAws({
+      name: this.state.fullname,
+      mobileNumber: this.state.mobileNumber,
+      imageSrc: imageSrc,
+      diagnosis: this.state.diagnosis
+    })
   }
 
   handleChange(e) {
