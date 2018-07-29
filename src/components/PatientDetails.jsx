@@ -5,13 +5,18 @@ import PropTypes from 'prop-types'
 class PatientDetails extends Component {
   constructor(props) {
     super(props)
-
+    this.state = {
+      currentIndex: 0,
+      patients: [0,1,2],
+      currentPatient: 0
+    }
     this.renderSelectedPatient = this.renderSelectedPatient.bind(this)
+    this.renderOtherPatient = this.renderOtherPatient.bind(this)
   }
 
-  renderSelectedPatient({ selectedIndex }) {
+  renderSelectedPatient() {
     let patient
-    switch (selectedIndex) {
+    switch (this.state.patients[0]) {
     case 0:
       patient = this.props.patient_0
       break
@@ -50,19 +55,45 @@ class PatientDetails extends Component {
     }
   }
 
+  renderOtherPatient({ patient }) {
+    let data, index
+    switch (patient) {
+    case 0:
+      data = this.props.patient_0
+      index = this.state.patients[0]
+      break
+    case 1:
+      data = this.props.patient_1
+      index = this.state.patients[1]
+      break
+    case 2:
+      data = this.props.patient_2
+      index = this.state.patients[2]
+      break
+    }
+    return <li onClick={() => this.switchPatients({ index })}><img className='medium' src={data.image}/></li>
+  }
+
+  switchPatients({ index }) {
+    const patients = this.state.patients
+    const b = patients[0]
+    patients[0] = patients[index]
+    patients[index] = b
+    this.setState({ patients })
+  }
+
   render() {
     return (
       <div className='col-right'>
         <h2 className='primary-heading'>User Details</h2>
         <div className='user-info'>
-          {this.props.patient_0 ? this.renderSelectedPatient({ selectedIndex: 0 }) : null}
+          {this.renderSelectedPatient()}
 
           <div className='other-matches'>
             <h4>Other Matches:</h4>
             <ul>
-              <li><img className='higher' src='https://media.creativemornings.com/uploads/user/avatar/89900/Profile_picture_square.jpg'/></li>
-              <li><img className='medium' src='http://www.sardiniauniqueproperties.com/wp-content/uploads/2015/10/square-profile-pic-2.jpg'/></li>
-              <li><img className='lower' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj0J_rHEqNM0dcwxZw_7WAsW7twPtc6gKCqIVYoWnBlro7zYAg'/></li>
+              {this.renderOtherPatient({ patient: this.state.patients[1] })}
+              {this.renderOtherPatient({ patient: this.state.patients[2] })}
             </ul>
           </div>
         </div>

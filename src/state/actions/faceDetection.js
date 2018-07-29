@@ -35,6 +35,7 @@ export const uploadImageToAws = ({ imageSrc, mobileNumber, name, diagnosis }) =>
         type: UPLOAD_SUCCESSFULL,
         payload: true
       })
+      window.alert('Registration Successful!')
     }
   })
 });
@@ -51,7 +52,10 @@ export const searchByImage = ({ imageSrc }) => dispatch => new Promise(function(
     MaxFaces: 3
   }
   rekognition.searchFacesByImage(params, function(err, data) {
-    if (err) window.console.log(err, err.stack)
+    if (err) {
+      window.console.log(err, err.stack)
+      window.alert(err.toString())
+    }
     else {
       if (data.FaceMatches.length > 0) {
         data.FaceMatches.map((item, index) => {
@@ -68,20 +72,28 @@ export const searchByImage = ({ imageSrc }) => dispatch => new Promise(function(
               } else {
                 window .console.log(data)
                 const result = data.Item.FullName.split(',')
-                dispatch({
-                  type: `MATCH_IMAGE_${index}`,
-                  payload: {
-                    result,
-                    image: `https://s3-ap-northeast-1.amazonaws.com/facerecognitionbuckethackfest3pg/${[result[2]]}`
-                  }
-                })
-                return data
+                if (result) {
+                  dispatch({
+                    type: `MATCH_IMAGE_${index}`,
+                    payload: {
+                      result,
+                      image: `https://s3-ap-northeast-1.amazonaws.com/facerecognitionbuckethackfest3pg/${[result[2]]}`
+                    }
+                  })
+                } else {
+                  dispatch({
+                    type: `MATCH_IMAGE_${index}`,
+                    payload: null
+                  })
+                }
+                return resolve('ok')
               }
             })
           }
         })
       } else {
         window.console.log('No face found!!!!')
+        window.alert('No results')
       }
     }
   })
